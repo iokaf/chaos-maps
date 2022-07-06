@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="chaotic_maps",
-    version="0.0.1",
+    name="chaos_maps",
+    version="0.1.1",
     author="Dr. Ioannis Kafetzis",
     author_email="ioanniskaf@gmail.com",
     description="A package for studying and visualizing the dynamical behavior of chaotic maps",
@@ -19,7 +19,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=['chaotic_maps', 'chaotic_maps.plotting'],
+    packages=['chaos_maps', 'chaos_maps.plotting'],
     install_requires = [
     "numpy",
     "matplotlib"

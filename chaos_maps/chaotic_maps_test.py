@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 import types
 
-from src.chaotic_map import ChaoticMap
+from chaos_maps.chaotic_map import ChaoticMap
 
 
 def logistic_function(x, r):

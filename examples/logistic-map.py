@@ -3,8 +3,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from chaotic_maps import ChaoticMap
-from chaotic_maps.plotting import ChaoticMapPlot
+from chaos_maps import ChaoticMap
+from chaos_maps.plotting import ChaoticMapPlot
 
 # Define the iteration step for the logistic map
 

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from typing import List, Tuple, TypeVar, Union
 Figure = TypeVar("Figure")
 
-from chaotic_maps.chaotic_maps import ChaoticMap
+from chaos_maps.chaotic_maps import ChaoticMap
 
 
 class ChaoticMapPlot:

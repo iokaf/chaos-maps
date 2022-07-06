@@ -2,8 +2,8 @@ import pytest
 import numpy as np
 import types
 
-from src.chaotic_map import ChaoticMap
-from src.plotting.plotting import ChaoticMapPlot
+from chaos_map.chaotic_map import ChaoticMap
+from chaos_map.plotting.plotting import ChaoticMapPlot
 
 def double_function(x, r):
     x, y = x
