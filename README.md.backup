@@ -22,7 +22,7 @@ and parameter set, the Lyapunov exponent diagram, the return map and Cobweb diag
 ## Installing - Getting started
 
 The chaotic-maps library can be installed using pip through
-> pip install chaos-maps
+> pip install chaotic-maps
 
 or 
 > pip3 install chaotic-maps
