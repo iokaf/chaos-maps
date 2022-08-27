@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="chaos_maps",
-    version="0.1.1",
+    version="0.1.2",
     author="Dr. Ioannis Kafetzis",
     author_email="ioanniskaf@gmail.com",
     description="A package for studying and visualizing the dynamical behavior of chaotic maps",

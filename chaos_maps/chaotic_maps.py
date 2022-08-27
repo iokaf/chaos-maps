@@ -135,27 +135,29 @@ class ChaoticMap:
         pams (tuple[float]): The parameters of the function
         which_num (int, optional): The index of the numerator, Default=0
         which_den (int, optional): The index of the denominator, Default=0
-        step (float, optional): The step size, Default=1e-4
+        step (float, optional): The step size, Default=1e-6
 
         Returns:
         The partial derivative of the function at the point
         """
         which_num = kwargs.get("which_num", 0)
         which_den = kwargs.get("which_den", 0)
-        step = kwargs.get("step", 1e-4)
+        step = kwargs.get("step", 1e-6)
+        step = 1e-6
 
         moved_point_1 = ChaoticMap.alter_tuple_value(point, which_den, step)
-        moved_point_2 = ChaoticMap.alter_tuple_value(point, which_den, -step)
+        # moved_point_2 = ChaoticMap.alter_tuple_value(point, which_den, -step)
 
         next_moved_point_1 = self.iteration(moved_point_1, pams)
-        next_moved_point_2 = self.iteration(moved_point_2, pams)
+        # next_moved_point_2 = self.iteration(moved_point_2, pams)
+        next_moved_point_2 = self.iteration(point, pams)
 
         return (next_moved_point_1[which_num] - next_moved_point_2[which_num]) / (
-            2 * step
+            step
         )
 
     def approximate_jacobian(
-        self, point: Tuple[float], pam: Tuple[float], step: float = 1e-4
+        self, point: Tuple[float], pam: Tuple[float], step: float = 1e-6
     ) -> np.array:
         """Approximate the Jacobian of the chaotic map at a point
 
@@ -193,12 +195,51 @@ class ChaoticMap:
         discard (int, optional): The number of iterations to discard, Default=100
         num_points (int, optional): The number of points to use in the approximation, Default=1000
 
-        step (float, optional): The step size, Default=1e-4
+        step (float, optional): The step size, Default=1e-6
         """
 
         num_points = kwargs.get("num_points", 1000)
         discard = kwargs.get("discard", 100)
-        step = kwargs.get("step", 1e-04)
+        step = kwargs.get("step", 1e-06)
+
+        gen = self.trajectory(point, pams, num_points)
+        gen = itertools.islice(gen, discard, None)
+
+        diagonal_elements = []
+
+        q_orthogonal = np.identity(len(point))
+
+        for traj_poin in gen:
+            jacobian = self.approximate_jacobian(traj_poin, pams, step)
+            updated_q = jacobian @ q_orthogonal
+            q_orthogonal, r_factor = np.linalg.qr(updated_q)
+            diagonal_elements.append(np.diagonal(r_factor))
+
+        les = np.zeros(diagonal_elements[0].shape)
+
+        for diag in diagonal_elements:
+            diag = np.array([max(abs(x), 1e-16) for x in diag])
+            les += np.log(np.abs(diag))
+
+        return les / num_points
+
+    def approximate_lyapunov_exponents_old(
+        self, point: Tuple[float], pams: Tuple[float], **kwargs
+    ) -> np.array:
+        """Approximate the Lyapunov exponents of the chaotic map at a point
+
+        Args:
+        point (tuple[float]): The point to calculate the Lyapunov exponents at
+        pams (tuple[float]): The parameters of the function
+        discard (int, optional): The number of iterations to discard, Default=100
+        num_points (int, optional): The number of points to use in the approximation, Default=1000
+
+        step (float, optional): The step size, Default=1e-6
+        """
+
+        num_points = kwargs.get("num_points", 1000)
+        discard = kwargs.get("discard", 100)
+        step = kwargs.get("step", 1e-06)
 
         gen = self.trajectory(point, pams, num_points)
         gen = itertools.islice(gen, discard, None)

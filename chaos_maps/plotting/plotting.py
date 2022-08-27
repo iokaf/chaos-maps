@@ -365,7 +365,7 @@ class ChaoticMapPlot:
         for pam in self._iterator_parameter_gen_(parameters):
             try:
                 le_now = self.map.approximate_lyapunov_exponents(
-                    start_point, pam, num_points=1000, discard=100, h=1e-04
+                    start_point, pam, num_points=2000, discard=100, h=1e-06
                 )
                 pam_loc, _ = self._find_iterable_(parameters)
                 le_dict[pam[pam_loc]] = le_now
