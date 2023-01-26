@@ -223,44 +223,6 @@ class ChaoticMap:
 
         return les / num_points
 
-    def approximate_lyapunov_exponents_old(
-        self, point: Tuple[float], pams: Tuple[float], **kwargs
-    ) -> np.array:
-        """Approximate the Lyapunov exponents of the chaotic map at a point
-
-        Args:
-        point (tuple[float]): The point to calculate the Lyapunov exponents at
-        pams (tuple[float]): The parameters of the function
-        discard (int, optional): The number of iterations to discard, Default=100
-        num_points (int, optional): The number of points to use in the approximation, Default=1000
-
-        step (float, optional): The step size, Default=1e-6
-        """
-
-        num_points = kwargs.get("num_points", 1000)
-        discard = kwargs.get("discard", 100)
-        step = kwargs.get("step", 1e-06)
-
-        gen = self.trajectory(point, pams, num_points)
-        gen = itertools.islice(gen, discard, None)
-
-        diagonal_elements = []
-
-        q_diagonal = np.identity(len(point))
-
-        for traj_poin in gen:
-            jacobian = self.approximate_jacobian(traj_poin, pams, step)
-            updated_q = jacobian @ q_diagonal
-            q_diagonal, r_factor = np.linalg.qr(updated_q)
-            diagonal_elements.append(np.diagonal(r_factor))
-
-        les = np.zeros(diagonal_elements[0].shape)
-
-        for diag in diagonal_elements:
-            les += np.log(np.abs(diag))
-
-        return les / num_points
-
     def is_divergent(
         self, point: Tuple[float], pams: Tuple[float], num_points: int = 2000
     ) -> bool:
